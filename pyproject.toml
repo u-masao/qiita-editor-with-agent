@@ -6,7 +6,7 @@ readme = "README.md"
 requires-python = ">=3.11"
 dependencies = [
     "gradio>=5.23.3",
-    "openai-agents>=0.0.7",
+    "openai-agents[viz]>=0.0.7",
     "python-dotenv>=1.1.0",
     "qiita-sdk>=1.1",
 ]
