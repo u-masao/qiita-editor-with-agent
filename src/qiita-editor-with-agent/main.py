@@ -6,16 +6,19 @@ AI エージェントがブログの原稿をチェックして投稿してく�
 サポートする媒体: Qiita
 """
 
+import io
 import json
 import os
 from typing import Any, List, Literal, Tuple
 
 from dotenv import load_dotenv
+from PIL import Image
 
 load_dotenv()
 
 import gradio as gr
 from agents import Agent, RunContextWrapper, Runner, function_tool
+from agents.extensions.visualization import draw_graph
 from pydantic import BaseModel
 from qiita import Qiita
 from qiita.v2.models.create_item_request import CreateItemRequest
@@ -293,6 +296,12 @@ with gr.Blocks() as demo:
             submit_button = gr.Button("チェック＆投稿")
         with gr.Tab("プレビュー"):
             preview_pane = gr.Markdown(**preview_kwargs)
+
+        with gr.Tab("エージェント概要"):
+            graph = draw_graph(editor_agent)
+            image_stream = io.BytesIO(graph.pipe(format="png"))
+            image = Image.open(image_stream)
+            gr.Image(image, label="構成図")
 
     # markdown プレビューの更新
     gr.on(
